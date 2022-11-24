@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include<math.h>
+int main() {
+	int n, m, max, min, o, z = 0;
+	scanf("%d", &n);
+	scanf("%d", &m);
+	for (int j = 0; j < m; j++) {
+		scanf("%d", &o);
+		if (n % 2 == 1)
+			z = (n + 1) / 2;
+		else  z = n / 2;
+		min = ((o <= z ? o : n + 1 - o) > min ? (o <= z ? o : n + 1 - o) : min);
+		max = (((n + 1 - o) > o ? (n + 1 - o) : o) > max ? ((n + 1 - o) > o ? (n + 1 - o) : o) : max);
+	}
+	printf("%d %d", min, max);
+	return 0;
+}
