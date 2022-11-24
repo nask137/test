@@ -1,0 +1,61 @@
+#define _CRT_SECURE_NO_WARNINGS  1
+#include <stdio.h>
+#include<stdlib.h>
+void 升序排列(int* x, int n);
+int total = 0;
+int main()//这个算法 我在洛谷上试了  现在是可行的 也不超时（之前没优化排序 ，会超时）
+{
+	int n, z = 0;
+	scanf("%d", &n);
+	int* fWight = malloc(n * sizeof(int));
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &fWight[i]);
+	}
+	升序排列(fWight, n);//将重量从小到大排起来。 
+	while (n > 1)
+	{
+		total += (fWight[0] + fWight[1]);//每次取最前面的两堆果子合并，后面元素依次前移。之所以进行排序 每次从最小的重量开始加  是为了保证
+		//total最小  因为从小的加 保证合并来的重量相对其他合并最小 在之后的合并中 会省力气 。相反试想一下  如果第一次就让最大的进行合并 以
+		//后每次对他与其余果子合并时  都会带着最大的那一份的质量  就费力。所以质量越大的 越晚加 。
+		fWight[0] += fWight[1];
+		for (int i = 1; i < n - 1; i++)
+		{
+			fWight[i] = fWight[i + 1];
+		}
+		n--;
+		for (int j = 0; j < n - 1; j++) {//由于  前面的果子合并 导致数组中重量的排序改变 需重新排序但要注意的是数组中除了0下标元素   其余元素 
+			//仍然是按照升序排列的  所以我们只要将第一个元素放入他合适的位置即可 
+			if (fWight[j] > fWight[j + 1]) {//如果fWight[0] > fWight[1]，就让fWight[0]后移  即和 fWight[1]换位置  随着j++  直到将其放入合适的位置
+				int  tmp = fWight[j];
+				fWight[j] = fWight[j + 1];
+				fWight[j + 1] = tmp;
+			}
+			else break; //fWight[j] < fWight[j + 1]的时候  说明  原来的fWight[0]到了他合适的位置   后面的元素就不需要再排序了，因为其余元素 本来就是升序的  就跳出循环
+		}
+	}
+	printf("%d", total);
+	free(fWight);
+
+	fWight = NULL;
+
+	return 0;
+}
+void 升序排列(int* x, int n) {//此排序方法是我优化过的  加快了排序速度和效率  不然洛谷会判超时
+	//具体优化点如下
+	int* m = x;
+	int s = 0;//创造一个变量s来判断每次小循环是否进行过交换
+	for (int j = 0; j < n; j++) {//大遍历
+		x = m; s = 0;
+		for (int i = 0; i < n - 1; i++) {//小排序循环
+
+			if (*x > *(x + 1)) {
+				int tmp = *x;
+				*x = *(x + 1);
+				*(x + 1) = tmp;
+				s++;//如果交换过  就对s进行++ 变为非零值
+			}
+			x++;
+		}
+		if (!s)break;//如果s为零  说明上次小排序没有交换任何元素的位置   也就说明数组 已经是按照升序排序  就不再进行后面的排序  
+	}
+}
