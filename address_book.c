@@ -3,30 +3,30 @@
 int main() {
 	int input = 0;
 
-	//´´½¨Í¨Ñ¶Â¼
+	//åˆ›å»ºé€šè®¯å½•
 	struct contact con[MAX];
-	//³õÊ¼»¯Í¨Ñ¶Â¼
+	//åˆå§‹åŒ–é€šè®¯å½•
 	Initcontact(&con);
 	do {
 		menu();
-		printf("ÇëÑ¡Ôñ£º>");
+		printf("è¯·é€‰æ‹©ï¼š>");
 		scanf("%d", &input);
 		switch (input) {
-		case 1:Ôö¼Ó( &con); 
+		case 1:å¢åŠ ( &con); 
 			break;
-		case 2:É¾³ı(&con);
+		case 2:åˆ é™¤(&con);
 			break;
-		case 3:²éÕÒ(&con);
+		case 3:æŸ¥æ‰¾(&con);
 			break;
-		case 4:ĞŞ¸Ä(&con);
+		case 4:ä¿®æ”¹(&con);
 			break;
-		case 5:Õ¹Ê¾(&con);
+		case 5:å±•ç¤º(&con);
 			break;
-		case 6:ÅÅĞò(&con);
+		case 6:æ’åº(&con);
 			break;
-		case 0:printf("ÍË³ö£¡\n");
+		case 0:printf("é€€å‡ºï¼\n");
 			break;
-		default:printf("Ñ¡Ôñ´íÎó£¡\n");
+		default:printf("é€‰æ‹©é”™è¯¯ï¼\n");
 			break;
 		}
 	} while (input);
