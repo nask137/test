@@ -1,0 +1,150 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
+#include <string.h>
+
+int 乘除运算(char* str, int* pindex);
+int 计算(char* str);
+
+int isnum(char ch)
+{
+    int is = 0;
+    if (ch >= '0' && ch <= '9')
+    {
+        is = 1;
+    }
+    return is;
+}
+
+char* 括号(char* str, int* pindex)
+{
+    char* pstr = NULL;
+    int num = 0;
+    int leftindex = *pindex;
+
+    do
+    {
+        switch (*(str + (*pindex)))
+        {
+        case '(':
+            num++;
+
+            break;
+        case ')':
+            if (num == 0)
+            {
+                (*pindex)++;
+                pstr =(char*) malloc(sizeof(char) * (*pindex - leftindex));
+                if(pstr)
+                strncpy(pstr,  str + leftindex, *pindex - leftindex - 1);
+                return pstr;
+            }
+            else
+            {
+                num--;
+            }
+            break;
+
+        }
+    } while (*(str + (*pindex)++) != '\0');
+
+}
+
+int getnum(char* str, int* pin)
+{
+    int value = 0;
+    int index = *pin;
+
+    while (*(str + index) == '(')
+    {
+        char* psubstr = NULL;
+        *pin = ++index;
+        psubstr = 括号(str, pin);
+        value = 计算(psubstr);
+          free(psubstr);
+        psubstr = NULL;
+        return value;
+    }
+    while (isnum(*(str + index)))
+    {
+        value = value * 10 + (str[index] - '0');
+        index++;
+    }
+    *pin = index;
+    return value;
+}
+
+void 消除空格(char* str)
+{
+    int i = 0;
+    int j = 0;
+    while ((str[i] = str[j++]) != '\0')
+    {
+        if (str[i] != ' ')
+        {
+            i++;
+        }
+    }
+}
+
+int 计算(char* str)
+{
+    int value = 0;
+    int index = 0;
+    value = 乘除运算(str, &index);
+    while (1)
+    {
+        char ch = *(str + index);
+        index++;
+        switch (ch)
+        {
+        case '+':
+            value += 乘除运算(str, &index);
+            break;
+        case '-':
+            value -= 乘除运算(str, &index);
+            break;
+        case '\0':
+            return value;
+            break;
+        }
+
+    }
+
+}
+
+int 乘除运算(char* str, int* pindex)
+{
+    int value = 0;
+    
+    value = getnum(str, pindex);
+    while (1)
+    {
+        if (*(str + (*pindex)) == '*')
+        {
+            (*pindex)++;
+            value *= getnum(str, pindex);
+        }
+        else if (*(str + (*pindex)) == '/')
+        {
+            (*pindex)++;
+            value /= getnum(str, pindex);
+        }
+        else
+        {
+            break;
+        }
+    }
+    return value;
+}
+
+void main()
+{
+    char str[1024] = { 0 };
+    scanf("%[^\n]s", str);
+    消除空格(str);
+    int a = 计算(str);
+    printf("%d\n", a);
+   
+}
